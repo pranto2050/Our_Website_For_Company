@@ -17,6 +17,8 @@ export default defineConfig(({ mode }) => ({
     dedupe: ["react", "react-dom", "framer-motion"],
     alias: {
       "@": path.resolve(__dirname, "./src"),
+      // Use CJS bundle to avoid Rollup ESM resolution issues on Vercel (render/dom/motion.mjs etc.)
+      "framer-motion": path.resolve(__dirname, "node_modules/framer-motion/dist/cjs/index.js"),
     },
   },
   optimizeDeps: {
