@@ -1,6 +1,5 @@
 import { Link } from "react-router-dom";
 import { Mail, Phone, MapPin, Linkedin, Twitter, Facebook, Instagram } from "lucide-react";
-
 const footerLinks = {
   services: [
     { name: "Website Design", href: "/services#web-design" },
