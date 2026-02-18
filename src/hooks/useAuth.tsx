@@ -45,99 +45,69 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   };
 
   useEffect(() => {
-    let subscription: any;
-    
-    try {
-      // Set up auth state listener FIRST
-      const { data: { subscription: sub } } = supabase.auth.onAuthStateChange(
-        async (event, session) => {
-          setSession(session);
-          setUser(session?.user ?? null);
-          
-          if (session?.user) {
-            // Use setTimeout to avoid potential deadlocks
-            setTimeout(() => checkUserRole(session.user.id), 0);
-          } else {
-            setIsAdmin(false);
-            setIsApproved(false);
-            setRegistrationStatus(null);
-          }
-          
-          setLoading(false);
-        }
-      );
-      subscription = sub;
-
-      // THEN check for existing session
-      supabase.auth.getSession().then(({ data: { session } }) => {
+    // Set up auth state listener FIRST
+    const { data: { subscription } } = supabase.auth.onAuthStateChange(
+      async (event, session) => {
         setSession(session);
         setUser(session?.user ?? null);
         
         if (session?.user) {
-          checkUserRole(session.user.id);
+          // Use setTimeout to avoid potential deadlocks
+          setTimeout(() => checkUserRole(session.user.id), 0);
+        } else {
+          setIsAdmin(false);
+          setIsApproved(false);
+          setRegistrationStatus(null);
         }
         
         setLoading(false);
-      }).catch((error) => {
-        console.error('Error getting session:', error);
-        setLoading(false);
-      });
-    } catch (error) {
-      console.error('Error setting up auth:', error);
-      setLoading(false);
-    }
-
-    return () => {
-      if (subscription) {
-        subscription.unsubscribe();
       }
-    };
+    );
+
+    // THEN check for existing session
+    supabase.auth.getSession().then(({ data: { session } }) => {
+      setSession(session);
+      setUser(session?.user ?? null);
+      
+      if (session?.user) {
+        checkUserRole(session.user.id);
+      }
+      
+      setLoading(false);
+    });
+
+    return () => subscription.unsubscribe();
   }, []);
 
   const signIn = async (email: string, password: string) => {
-    try {
-      const { error } = await supabase.auth.signInWithPassword({
-        email,
-        password,
-      });
-      return { error };
-    } catch (error) {
-      console.error('Error signing in:', error);
-      return { error: error as Error };
-    }
+    const { error } = await supabase.auth.signInWithPassword({
+      email,
+      password,
+    });
+    return { error };
   };
 
   const signUp = async (email: string, password: string, fullName: string) => {
-    try {
-      const { error } = await supabase.auth.signUp({
-        email,
-        password,
-        options: {
-          emailRedirectTo: window.location.origin,
-          data: {
-            full_name: fullName,
-          },
+    const { error } = await supabase.auth.signUp({
+      email,
+      password,
+      options: {
+        emailRedirectTo: window.location.origin,
+        data: {
+          full_name: fullName,
         },
-      });
-      return { error };
-    } catch (error) {
-      console.error('Error signing up:', error);
-      return { error: error as Error };
-    }
+      },
+    });
+    return { error };
   };
 
   const signOut = async () => {
-    try {
-      await supabase.auth.signOut();
-    } catch (error) {
-      console.error('Error signing out:', error);
-    } finally {
-      setUser(null);
-      setSession(null);
-      setIsAdmin(false);
-      setIsApproved(false);
-      setRegistrationStatus(null);
-    }
+    await supabase.auth.signOut();
+    setUser(null);
+    setSession(null);
+    setIsAdmin(false);
+    setIsApproved(false);
+    setRegistrationStatus(null);
   };
 
   return (
