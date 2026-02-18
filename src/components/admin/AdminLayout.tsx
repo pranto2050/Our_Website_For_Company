@@ -173,7 +173,6 @@ export function AdminLayout({ children, title, description }: AdminLayoutProps) 
                 <p className="text-muted-foreground mt-1">{description}</p>
               )}
             </div>
-
             {children}
           </div>
         </main>
