@@ -130,16 +130,14 @@ export function ServicesSection() {
             <motion.div
               key={service.title}
               variants={itemVariants}
-              className="bg-card border border-border rounded-xl p-6 shadow-md hover:shadow-lg transition-shadow duration-300 h-full"
+              className="bg-card border border-border rounded-xl p-6 shadow-md hover:shadow-lg transition-shadow duration-300 h-full group"
             >              
-              <div className="w-14 h-14 rounded-xl bg-accent/10 flex items-center justify-center mb-5">
-                <service.icon className="w-7 h-7 text-accent" />
+              <div className="w-14 h-14 rounded-xl bg-accent/10 flex items-center justify-center mb-5 group-hover:bg-accent group-hover:scale-110 transition-all duration-300">
+                <service.icon className="w-7 h-7 text-accent group-hover:text-accent-foreground transition-colors" />
               </div>
               
-              <h3 className="text-xl font-semibold mb-3">
-                <span className="hover:text-accent transition-colors duration-300 cursor-default">
-                  {service.title}
-                </span>
+              <h3 className="text-xl font-semibold mb-3 group-hover:text-accent transition-colors">
+                {service.title}
               </h3>
               
               <p className="text-muted-foreground mb-4 text-sm leading-relaxed">
