@@ -146,7 +146,7 @@ export function ServicesSection() {
               
               <Link 
                 to={service.href}
-                className="inline-flex items-center gap-2 text-accent font-medium hover:gap-3 transition-all duration-300"
+                className="inline-flex items-center gap-2 text-accent font-medium opacity-0 -translate-x-4 group-hover:opacity-100 group-hover:translate-x-0 transition-all duration-300"
               >
                 Learn More <ArrowRight className="w-4 h-4" />
               </Link>
