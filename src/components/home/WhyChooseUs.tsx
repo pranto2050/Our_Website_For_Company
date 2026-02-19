@@ -121,7 +121,7 @@ export function WhyChooseUs() {
                   <feature.icon className="w-7 h-7 text-accent group-hover:text-accent-foreground transition-colors" />
                 </div>
                 <h4 className="font-semibold text-lg mb-2 group-hover:text-accent transition-colors">{feature.title}</h4>
-                <p className="text-muted-foreground">{feature.description}</p>
+                <p className="text-muted-foreground text-sm">{feature.description}</p>
               </motion.div>
             ))}
           </motion.div>
