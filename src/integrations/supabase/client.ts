@@ -10,8 +10,9 @@ const SUPABASE_PUBLISHABLE_KEY = import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY |
 
 // Check if proper configuration exists
 if (!SUPABASE_PUBLISHABLE_KEY || SUPABASE_PUBLISHABLE_KEY === 'your_supabase_anon_key_here') {
-  console.error('⚠️ Supabase is not properly configured. Please update .env.local with your actual Supabase anon key.');
-  console.error('Get your key from: https://app.supabase.com/project/psjkbzxaaifkfyqizuiz/settings/api');
+  console.warn('🎭 Running in DEMO MODE - Supabase database is not configured.');
+  console.info('✅ Demo login works with: demo.client@abitsolutions.com / Demo@123456 or demo.admin@abitsolutions.com / Admin@123456');
+  console.info('💡 To enable real database: Update .env.local with your Supabase anon key from https://app.supabase.com/project/psjkbzxaaifkfyqizuiz/settings/api');
 }
 
 export const supabase = createClient<Database>(SUPABASE_URL, SUPABASE_PUBLISHABLE_KEY, {
