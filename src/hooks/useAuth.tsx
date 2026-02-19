@@ -30,7 +30,10 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   // Check if Supabase is properly configured
   const isSupabaseConfigured = () => {
     const key = import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY;
-    return key && key !== 'your_supabase_anon_key_here' && key.length > 20;
+    return key && 
+      key !== 'your_supabase_anon_key_here' && 
+      key !== 'placeholder-key-for-demo-mode' &&
+      key.length > 20;
   };
 
   const checkUserRole = async (userId: string) => {

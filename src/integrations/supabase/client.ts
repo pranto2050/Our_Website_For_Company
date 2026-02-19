@@ -3,21 +3,26 @@ import { createClient } from '@supabase/supabase-js';
 import type { Database } from './types';
 
 const SUPABASE_URL = import.meta.env.VITE_SUPABASE_URL || 'https://psjkbzxaaifkfyqizuiz.supabase.co';
-const SUPABASE_PUBLISHABLE_KEY = import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY || '';
+const SUPABASE_PUBLISHABLE_KEY = import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY || 'placeholder-key-for-demo-mode';
 
 // Import the supabase client like this:
 // import { supabase } from "@/integrations/supabase/client";
 
 // Check if proper configuration exists
-if (!SUPABASE_PUBLISHABLE_KEY || SUPABASE_PUBLISHABLE_KEY === 'your_supabase_anon_key_here') {
+const isConfigured = SUPABASE_PUBLISHABLE_KEY && 
+  SUPABASE_PUBLISHABLE_KEY !== 'your_supabase_anon_key_here' && 
+  SUPABASE_PUBLISHABLE_KEY !== 'placeholder-key-for-demo-mode' &&
+  SUPABASE_PUBLISHABLE_KEY.length > 20;
+
+if (!isConfigured) {
   console.warn('🎭 Running in DEMO MODE - Supabase database is not configured.');
   console.info('✅ Demo login works with: demo.client@abitsolutions.com / Demo@123456 or demo.admin@abitsolutions.com / Admin@123456');
-  console.info('💡 To enable real database: Update .env.local with your Supabase anon key from https://app.supabase.com/project/psjkbzxaaifkfyqizuiz/settings/api');
+  console.info('💡 To enable real database: Add VITE_SUPABASE_PUBLISHABLE_KEY to your environment variables');
 }
 
 export const supabase = createClient<Database>(SUPABASE_URL, SUPABASE_PUBLISHABLE_KEY, {
   auth: {
-    storage: localStorage,
+    storage: typeof window !== 'undefined' ? localStorage : undefined,
     persistSession: true,
     autoRefreshToken: true,
   }
