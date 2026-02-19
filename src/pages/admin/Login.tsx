@@ -8,7 +8,7 @@ import { Eye, EyeOff, Lock, Mail, ArrowRight, Shield, AlertCircle } from "lucide
 import { useAuth } from "@/hooks/useAuth";
 
 export default function AdminLogin() {
-  const { signIn } = useAuth();
+  const { signIn, isDemoMode } = useAuth();
   const navigate = useNavigate();
   const [showPassword, setShowPassword] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
@@ -39,6 +39,18 @@ export default function AdminLogin() {
   return (
     <div className="min-h-screen flex items-center justify-center py-12 bg-background">
       <div className="w-full max-w-md px-4">
+        {/* Demo Mode Banner */}
+        {isDemoMode && (
+          <div className="mb-6 bg-amber-500/10 border border-amber-500/20 rounded-xl p-4 text-center">
+            <p className="text-sm font-medium text-amber-600 dark:text-amber-400">
+              🎭 Demo Mode Active
+            </p>
+            <p className="text-xs text-muted-foreground mt-1">
+              Using demo credentials - No database connection required
+            </p>
+          </div>
+        )}
+        
         {/* Admin Badge */}
         <div className="text-center mb-8">
           <div className="inline-flex items-center gap-2 px-4 py-2 bg-accent/10 rounded-full mb-4">
@@ -54,6 +66,32 @@ export default function AdminLogin() {
           <p className="text-muted-foreground">
             Access the administration panel
           </p>
+        </div>
+
+        {/* Demo Admin Credentials */}
+        <div className="bg-muted/50 rounded-2xl p-6 border border-border mb-6">
+          <div className="text-center mb-4">
+            <h3 className="font-semibold text-sm text-foreground">🎯 Demo Admin Credentials</h3>
+            <p className="text-xs text-muted-foreground mt-1">Click to auto-fill</p>
+          </div>
+          <button
+            type="button"
+            onClick={() => setFormData({ email: "demo.admin@abitsolutions.com", password: "Admin@123456" })}
+            className="w-full bg-card rounded-xl p-4 border border-border hover:border-accent transition-colors text-left group"
+          >
+            <div className="flex items-center gap-2 mb-2">
+              <div className="w-8 h-8 rounded-lg bg-purple-500/10 flex items-center justify-center">
+                <Shield className="w-4 h-4 text-purple-500" />
+              </div>
+              <span className="font-semibold text-sm">Demo Admin Account</span>
+            </div>
+            <div className="space-y-1 text-xs">
+              <p className="text-muted-foreground">Email:</p>
+              <p className="font-mono text-foreground">demo.admin@abitsolutions.com</p>
+              <p className="text-muted-foreground mt-2">Password:</p>
+              <p className="font-mono text-foreground">Admin@123456</p>
+            </div>
+          </button>
         </div>
 
         {/* Login Form */}

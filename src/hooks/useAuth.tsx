@@ -1,6 +1,7 @@
 import { useState, useEffect, createContext, useContext, ReactNode } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { User, Session } from "@supabase/supabase-js";
+import { DEMO_MODE, validateDemoCredentials } from "@/lib/demo-mode";
 
 interface AuthContextType {
   user: User | null;
@@ -12,6 +13,7 @@ interface AuthContextType {
   isAdmin: boolean;
   isApproved: boolean;
   registrationStatus: string | null;
+  isDemoMode: boolean;
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
@@ -23,10 +25,16 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const [isAdmin, setIsAdmin] = useState(false);
   const [isApproved, setIsApproved] = useState(false);
   const [registrationStatus, setRegistrationStatus] = useState<string | null>(null);
+  const [isDemoMode, setIsDemoMode] = useState(false);
+  
+  // Check if Supabase is properly configured
+  const isSupabaseConfigured = () => {
+    const key = import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY;
+    return key && key !== 'your_supabase_anon_key_here' && key.length > 20;
+  };
 
   const checkUserRole = async (userId: string) => {
     try {
-      // Check if user is admin
       const { data: adminData, error: adminError } = await supabase.rpc('has_role', {
         _user_id: userId,
         _role: 'admin'
@@ -39,14 +47,13 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         setIsAdmin(adminData || false);
       }
 
-      // Check registration status
       const { data: statusData, error: statusError } = await supabase.rpc('get_user_status', {
         _user_id: userId
       });
       
       if (statusError) {
         console.warn('Could not check user status:', statusError.message);
-        setRegistrationStatus('approved'); // Default for demo
+        setRegistrationStatus('approved');
         setIsApproved(true);
       } else {
         setRegistrationStatus(statusData);
@@ -54,7 +61,6 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       }
     } catch (error) {
       console.error('Error checking user role:', error);
-      // Set defaults for demo
       setIsAdmin(false);
       setIsApproved(true);
       setRegistrationStatus('approved');
@@ -62,14 +68,28 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   };
 
   useEffect(() => {
-    // Set up auth state listener FIRST
+    if (!isSupabaseConfigured()) {
+      console.warn('⚠️ Running in DEMO MODE - Supabase not configured');
+      setIsDemoMode(true);
+      
+      const demoUser = localStorage.getItem('demo_user');
+      if (demoUser) {
+        const userData = JSON.parse(demoUser);
+        setUser({ id: userData.id, email: userData.email } as User);
+        setIsAdmin(userData.role === 'admin');
+        setIsApproved(true);
+        setRegistrationStatus('approved');
+      }
+      setLoading(false);
+      return;
+    }
+
     const { data: { subscription } } = supabase.auth.onAuthStateChange(
       async (event, session) => {
         setSession(session);
         setUser(session?.user ?? null);
         
         if (session?.user) {
-          // Use setTimeout to avoid potential deadlocks
           setTimeout(() => checkUserRole(session.user.id), 0);
         } else {
           setIsAdmin(false);
@@ -81,7 +101,6 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       }
     );
 
-    // THEN check for existing session
     supabase.auth.getSession()
       .then(({ data: { session } }) => {
         setSession(session);
@@ -102,6 +121,19 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   }, []);
 
   const signIn = async (email: string, password: string) => {
+    if (isDemoMode || !isSupabaseConfigured()) {
+      const demoUser = validateDemoCredentials(email, password);
+      if (demoUser) {
+        localStorage.setItem('demo_user', JSON.stringify(demoUser));
+        setUser({ id: demoUser.id, email: demoUser.email } as User);
+        setIsAdmin(demoUser.role === 'admin');
+        setIsApproved(true);
+        setRegistrationStatus('approved');
+        return { error: null };
+      }
+      return { error: new Error('Invalid demo credentials') };
+    }
+
     try {
       const { error } = await supabase.auth.signInWithPassword({
         email,
@@ -115,6 +147,10 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   };
 
   const signUp = async (email: string, password: string, fullName: string) => {
+    if (isDemoMode || !isSupabaseConfigured()) {
+      return { error: new Error('Sign up is not available in demo mode') };
+    }
+
     try {
       const { error } = await supabase.auth.signUp({
         email,
@@ -134,6 +170,16 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   };
 
   const signOut = async () => {
+    if (isDemoMode || !isSupabaseConfigured()) {
+      localStorage.removeItem('demo_user');
+      setUser(null);
+      setSession(null);
+      setIsAdmin(false);
+      setIsApproved(false);
+      setRegistrationStatus(null);
+      return;
+    }
+
     try {
       await supabase.auth.signOut();
     } catch (error) {
@@ -158,6 +204,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         isAdmin,
         isApproved,
         registrationStatus,
+        isDemoMode,
       }}
     >
       {children}
