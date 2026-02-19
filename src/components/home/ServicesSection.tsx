@@ -136,8 +136,10 @@ export function ServicesSection() {
                 <service.icon className="w-7 h-7 text-accent" />
               </div>
               
-              <h3 className="text-xl font-semibold mb-3 transition-colors duration-300 hover:text-accent cursor-default inline-block">
-                {service.title}
+              <h3 className="text-xl font-semibold mb-3">
+                <span className="hover:text-accent transition-colors duration-300 cursor-default">
+                  {service.title}
+                </span>
               </h3>
               
               <p className="text-muted-foreground mb-4 text-sm leading-relaxed">
