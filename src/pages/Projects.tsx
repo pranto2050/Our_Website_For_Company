@@ -129,7 +129,7 @@ const Projects = () => {
   };
 
   return (
-    <div className="min-h-screen">
+    <div className="min-h-screen cursor-default">
       <Header />
       <main className="pt-20">
         {/* Hero Section */}

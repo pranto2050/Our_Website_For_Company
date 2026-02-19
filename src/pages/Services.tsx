@@ -132,7 +132,7 @@ const services = [
 
 export default function Services() {
   return (
-    <div className="min-h-screen">
+    <div className="min-h-screen cursor-default">
       <Header />
       <main>
         {/* Hero Section */}

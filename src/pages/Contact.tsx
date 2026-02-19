@@ -77,7 +77,7 @@ export default function Contact() {
   };
 
   return (
-    <div className="min-h-screen">
+    <div className="min-h-screen cursor-default">
       <Header />
       <main>
         {/* Hero Section */}

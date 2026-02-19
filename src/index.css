@@ -116,10 +116,20 @@
   body {
     @apply bg-background text-foreground antialiased;
     font-feature-settings: "rlig" 1, "calt" 1;
+    cursor: default;
   }
 
   h1, h2, h3, h4, h5, h6 {
     @apply font-bold tracking-tight text-foreground;
+  }
+
+  /* Ensure buttons and links have pointer cursor */
+  button, a, [role="button"] {
+    cursor: pointer;
+  }
+
+  button:disabled, a[aria-disabled="true"] {
+    cursor: not-allowed;
   }
 }
 

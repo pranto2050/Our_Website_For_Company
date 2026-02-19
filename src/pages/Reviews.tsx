@@ -76,7 +76,7 @@ const stats = [
 
 export default function Reviews() {
   return (
-    <div className="min-h-screen">
+    <div className="min-h-screen cursor-default">
       <Header />
       <main>
         {/* Hero Section */}
