@@ -130,26 +130,31 @@ export function ServicesSection() {
             <motion.div
               key={service.title}
               variants={itemVariants}
-              className="bg-card border border-border rounded-xl p-6 shadow-md hover:shadow-lg transition-shadow duration-300 h-full group"
-            >              
-              <div className="w-14 h-14 rounded-xl bg-accent/10 flex items-center justify-center mb-5 group-hover:bg-accent group-hover:scale-110 transition-all duration-300">
-                <service.icon className="w-7 h-7 text-accent group-hover:text-accent-foreground transition-colors" />
+              className="bg-card border border-border rounded-xl p-6 shadow-md hover:shadow-lg transition-all duration-300 h-full group overflow-hidden relative"
+            >
+              {/* Gradient Background Overlay */}
+              <div className={`absolute inset-0 bg-gradient-to-br ${service.color} opacity-0 group-hover:opacity-100 transition-opacity duration-300 z-0`} />
+              
+              <div className="relative z-10">
+                <div className="w-14 h-14 rounded-xl bg-accent/10 flex items-center justify-center mb-5 group-hover:bg-accent group-hover:scale-110 transition-all duration-300">
+                  <service.icon className="w-7 h-7 text-accent group-hover:text-accent-foreground transition-colors" />
+                </div>
+                
+                <h3 className="text-xl font-semibold mb-3 group-hover:text-accent transition-colors">
+                  {service.title}
+                </h3>
+                
+                <p className="text-muted-foreground mb-4 text-sm leading-relaxed">
+                  {service.description}
+                </p>
+                
+                <Link 
+                  to={service.href}
+                  className="inline-flex items-center gap-2 text-accent font-medium opacity-0 -translate-x-4 group-hover:opacity-100 group-hover:translate-x-0 transition-all duration-300"
+                >
+                  Learn More <ArrowRight className="w-4 h-4" />
+                </Link>
               </div>
-              
-              <h3 className="text-xl font-semibold mb-3 group-hover:text-accent transition-colors">
-                {service.title}
-              </h3>
-              
-              <p className="text-muted-foreground mb-4 text-sm leading-relaxed">
-                {service.description}
-              </p>
-              
-              <Link 
-                to={service.href}
-                className="inline-flex items-center gap-2 text-accent font-medium opacity-0 -translate-x-4 group-hover:opacity-100 group-hover:translate-x-0 transition-all duration-300"
-              >
-                Learn More <ArrowRight className="w-4 h-4" />
-              </Link>
             </motion.div>
           ))}
         </motion.div>
