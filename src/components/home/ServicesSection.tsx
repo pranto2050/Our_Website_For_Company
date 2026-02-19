@@ -130,29 +130,28 @@ export function ServicesSection() {
             <motion.div
               key={service.title}
               variants={itemVariants}
+              className="service-card group h-full"
             >
-              <Link
-                to={service.href}
-                className="service-card group block h-full"
-              >
-                {/* Gradient Background on Hover */}
-                <div className={`absolute inset-0 rounded-xl bg-gradient-to-br ${service.color} opacity-0 group-hover:opacity-100 transition-opacity duration-500`} />
-                
-                <div className="relative z-10">
-                  <div className="w-14 h-14 rounded-xl bg-accent/10 flex items-center justify-center mb-5 group-hover:bg-accent group-hover:scale-110 transition-all duration-300">
-                    <service.icon className="w-7 h-7 text-accent group-hover:text-accent-foreground transition-colors" />
-                  </div>
-                  <h3 className="text-xl font-semibold mb-3 group-hover:text-accent transition-colors">
-                    {service.title}
-                  </h3>
-                  <p className="text-muted-foreground mb-4">
-                    {service.description}
-                  </p>
-                  <span className="inline-flex items-center gap-2 text-accent font-medium opacity-0 group-hover:opacity-100 transition-all duration-300 translate-x-0 group-hover:translate-x-2">
-                    Learn More <ArrowRight className="w-4 h-4" />
-                  </span>
+              {/* Gradient Background on Hover */}
+              <div className={`absolute inset-0 rounded-xl bg-gradient-to-br ${service.color} opacity-0 group-hover:opacity-100 transition-opacity duration-500`} />
+              
+              <div className="relative z-10">
+                <div className="w-14 h-14 rounded-xl bg-accent/10 flex items-center justify-center mb-5 group-hover:bg-accent group-hover:scale-110 transition-all duration-300">
+                  <service.icon className="w-7 h-7 text-accent group-hover:text-accent-foreground transition-colors" />
                 </div>
-              </Link>
+                <h3 className="text-xl font-semibold mb-3 group-hover:text-accent transition-colors">
+                  {service.title}
+                </h3>
+                <p className="text-muted-foreground mb-4">
+                  {service.description}
+                </p>
+                <Link 
+                  to={service.href}
+                  className="inline-flex items-center gap-2 text-accent font-medium hover:gap-3 transition-all duration-300"
+                >
+                  Learn More <ArrowRight className="w-4 h-4" />
+                </Link>
+              </div>
             </motion.div>
           ))}
         </motion.div>
