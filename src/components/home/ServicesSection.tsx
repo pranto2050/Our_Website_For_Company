@@ -130,18 +130,17 @@ export function ServicesSection() {
             <motion.div
               key={service.title}
               variants={itemVariants}
-              className="service-card group h-full cursor-default"
-            >
-              {/* Gradient Background on Hover */}
-              <div className={`absolute inset-0 rounded-xl bg-gradient-to-br ${service.color} opacity-0 group-hover:opacity-100 transition-opacity duration-500`} />
-              
+              className="bg-card border border-border rounded-xl p-6 transition-all duration-300 shadow-md hover:shadow-lg h-full cursor-default"
+            >              
               <div className="relative z-10">
-                <div className="w-14 h-14 rounded-xl bg-accent/10 flex items-center justify-center mb-5 group-hover:bg-accent group-hover:scale-110 transition-all duration-300">
-                  <service.icon className="w-7 h-7 text-accent group-hover:text-accent-foreground transition-colors" />
+                <div className="w-14 h-14 rounded-xl bg-accent/10 flex items-center justify-center mb-5 transition-all duration-300">
+                  <service.icon className="w-7 h-7 text-accent transition-colors" />
                 </div>
-                <h3 className="text-xl font-semibold mb-3 group-hover:text-accent transition-colors">
+                
+                <h3 className="text-xl font-semibold mb-3 hover:text-accent transition-colors cursor-default">
                   {service.title}
                 </h3>
+                
                 <p className="text-muted-foreground mb-4">
                   {service.description}
                 </p>
