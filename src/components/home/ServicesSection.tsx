@@ -130,27 +130,26 @@ export function ServicesSection() {
             <motion.div
               key={service.title}
               variants={itemVariants}
-              className="bg-card border border-border rounded-xl p-6 transition-all duration-300 shadow-md hover:shadow-lg h-full cursor-default"
+              className="bg-card border border-border rounded-xl p-6 shadow-md hover:shadow-lg transition-shadow duration-300 h-full"
             >              
-              <div className="relative z-10">
-                <div className="w-14 h-14 rounded-xl bg-accent/10 flex items-center justify-center mb-5 transition-all duration-300">
-                  <service.icon className="w-7 h-7 text-accent transition-colors" />
-                </div>
-                
-                <h3 className="text-xl font-semibold mb-3 hover:text-accent transition-colors cursor-default">
-                  {service.title}
-                </h3>
-                
-                <p className="text-muted-foreground mb-4">
-                  {service.description}
-                </p>
-                <Link 
-                  to={service.href}
-                  className="inline-flex items-center gap-2 text-accent font-medium hover:gap-3 transition-all duration-300 cursor-pointer"
-                >
-                  Learn More <ArrowRight className="w-4 h-4" />
-                </Link>
+              <div className="w-14 h-14 rounded-xl bg-accent/10 flex items-center justify-center mb-5">
+                <service.icon className="w-7 h-7 text-accent" />
               </div>
+              
+              <h3 className="text-xl font-semibold mb-3 transition-colors duration-300 hover:text-accent cursor-default inline-block">
+                {service.title}
+              </h3>
+              
+              <p className="text-muted-foreground mb-4 text-sm leading-relaxed">
+                {service.description}
+              </p>
+              
+              <Link 
+                to={service.href}
+                className="inline-flex items-center gap-2 text-accent font-medium hover:gap-3 transition-all duration-300"
+              >
+                Learn More <ArrowRight className="w-4 h-4" />
+              </Link>
             </motion.div>
           ))}
         </motion.div>
